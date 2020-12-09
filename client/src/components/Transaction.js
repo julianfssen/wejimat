@@ -7,7 +7,7 @@ function Transaction() {
 	const callApi = (req) => {
 		fetch(req)
 			.then(response => response.json())
-			.then(txns => txns.map(txn => setTransactions([...transactions, {txn}])))
+			.then(txns => setTransactions(txns))
 	}
 
 	return (
@@ -21,7 +21,7 @@ function Transaction() {
 			</button>
 			<div>
 				<ul>
-					{transactions.map(txn => <li key={txn.txn.id}>{txn.txn.name}</li>)}
+					{transactions.map(txn => <li key={txn.id}>{txn.name}</li>)}
 				</ul>
 			</div>
 		</div>
