@@ -11,14 +11,25 @@ function Transaction() {
 	}
 	
 	const handleSubmit = (e) => {
+		const data = {
+			name: textInput,
+			amount: 5.50
+		}
+
 		e.preventDefault();
-		console.log(textInput);
+		fetch('http://localhost:3000/api/v1/transactions', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
 	}
 
 	return (
 		<div>
 			<h1>What did you spend on?</h1>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={e => handleSubmit(e)}>
 			  <input
 			  	type='text'
 			  	name='transaction'
@@ -28,7 +39,8 @@ function Transaction() {
 			  >
 			  </input>
 			  <button
-					type='submit'
+					type='button'
+					value='summit'
 			  >
 			    Add
 			  </button>
