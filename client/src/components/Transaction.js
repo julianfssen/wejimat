@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 function Transaction() {
-	const [textInput, setTextInput] = useState('');
+	const [transactionName, setTransactionName] = useState('');
+	const [transactionAmount, setTransactionAmount] = useState(0);
 	const [transactions, setTransactions] = useState([]);
 
 	const callApi = (req) => {
@@ -11,12 +12,13 @@ function Transaction() {
 	}
 	
 	const handleSubmit = (e) => {
+		e.preventDefault();
+
 		const data = {
-			name: textInput,
-			amount: 5.50
+			name: transactionName,
+			amount: transactionAmount
 		}
 
-		e.preventDefault();
 		fetch('http://localhost:3000/api/v1/transactions', {
 			method: 'POST',
 			headers: {
@@ -32,27 +34,33 @@ function Transaction() {
 			<form onSubmit={e => handleSubmit(e)}>
 			  <input
 			  	type='text'
-			  	name='transaction'
+			  	name='transactionName'
 			    placeholder='I spent on...'
-			  	value={textInput}
-			  	onChange={e => setTextInput(e.target.value)}
+			  	value={transactionName}
+			  	onChange={e => setTransactionName(e.target.value)}
 			  >
 			  </input>
-			  <button
-					type='button'
-					value='summit'
+			  <input
+			  	type='text'
+			  	name='transactionAmount'
+			    placeholder='For RM...'
+					value={transactionAmount > 0 ? transactionAmount : ''}
+			  	onChange={e => setTransactionAmount(e.target.value)}
 			  >
-			    Add
-			  </button>
-			  <button
-			  	onClick={() => callApi('http://localhost:3000/api/v1/transactions')}
-			  >
-			    My transactions
-			  </button>
+			  </input>
+			  <input
+					type='submit'
+					value='Add Transaction'
+			  />
 			</form>
+			<button
+				onClick={() => callApi('http://localhost:3000/api/v1/transactions')}
+			>
+			  My Transactions
+			</button>
 			<div>
 				<ul>
-					{transactions.map(txn => <li key={txn.id}>{txn.name}</li>)}
+					{transactions.map(txn => <li key={txn.id}>{txn.name}: {txn.amount}</li>)}
 				</ul>
 			</div>
 		</div>

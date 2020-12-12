@@ -18,7 +18,7 @@ class Api::V1::TransactionsController < ApplicationController
     @transaction = Transaction.new(transaction_params)
 
     if @transaction.save
-      render json: @transaction, status: :created, location: @transaction
+      render json: @transaction, status: :created, location: api_v1_transactions_path
     else
       render json: @transaction.errors, status: :unprocessable_entity
     end
