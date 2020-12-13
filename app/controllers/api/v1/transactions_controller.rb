@@ -1,5 +1,5 @@
 class Api::V1::TransactionsController < ApplicationController
-  before_action :authenticate
+  before_action :authorized
   before_action :set_transaction, only: [:show, :update, :destroy]
 
   # GET /transactions
@@ -51,16 +51,7 @@ class Api::V1::TransactionsController < ApplicationController
     params.require(:transaction).permit(:name, :amount)
   end
 
-  def authenticate
-    return true if @current_user
-
-    authenticate_or_request_with_http_token do |token, _options|
-      p token
-      User.find_by(auth_token: token)
-    end
-  end
-
   def current_user
-    @current_user ||= authenticate
+    @current_user ||= logged_in_user
   end
 end

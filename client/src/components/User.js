@@ -22,7 +22,8 @@ function User() {
 		fetch('http://localhost:3000/api/v1/users', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${JWT_TOKEN}`
 			},
 			body: JSON.stringify(data)
 		})
