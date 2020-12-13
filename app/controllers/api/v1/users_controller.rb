@@ -1,5 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
+  # before_action :authorized, except: [:create, :login, :auto_login]
+  before_action :authorized, only: [:show]
 
   # GET /users
   def index
@@ -15,10 +17,12 @@ class Api::V1::UsersController < ApplicationController
 
   # POST /users
   def create
+    p user_params
     @user = User.new(user_params)
 
     if @user.save
-      token = encode_token({ user_id: @user.id })
+      payload = { user_id: @user.id }
+      token = encode_token(payload)
       render json: { user: @user, token: token }, status: :created, location: api_v1_user_path(@user)
     else
       render json: @user.errors, status: :unprocessable_entity
@@ -29,11 +33,16 @@ class Api::V1::UsersController < ApplicationController
     @user = User.find_by(username: params[:username])
 
     if @user&.authenticate(params[:password])
-      token = encode_token({ user_id: @user.id })
+      payload = { user_id: @user.id }
+      token = encode_token(payload)
       render json: { user: @user, token: token }
     else
       render json: { error: 'Invalid username or password' }
     end
+  end
+
+  def auto_login
+    render json: @user
   end
 
   # PATCH/PUT /users/1
@@ -59,6 +68,6 @@ class Api::V1::UsersController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def user_params
-    params.require(:user).permit(:name, :email, :password)
+    params.require(:user).permit(:username, :email, :password)
   end
 end

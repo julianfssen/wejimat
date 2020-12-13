@@ -19,17 +19,23 @@ function User() {
 			password
 		}
 
+		console.log('request data', data);
+
 		fetch('http://localhost:3000/api/v1/users', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${JWT_TOKEN}`
+				'Accept': 'application/json'
 			},
 			body: JSON.stringify(data)
 		})
 			.then(response => {
 				if (response.ok) {
+					response = response.json();
+					localStorage.setItem('token', response.token);
 					setSignupSuccess(true);
+				} else {
+					console.log('fail', response);
 				}
 			});
 	}
