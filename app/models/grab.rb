@@ -1,0 +1,2 @@
+class Grab < PaymentChannel
+end

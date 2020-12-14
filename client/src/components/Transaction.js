@@ -6,10 +6,16 @@ function Transaction() {
 	const [transactions, setTransactions] = useState([]);
 
 	const callApi = (req) => {
-		fetch(req)
+		fetch(req, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': localStorage.getItem('token')
+			}
+		})
 			.then(response => response.json())
 			.then(txns => {
-				console.log(txns);
 				setTransactions(txns)
 			})
 	}
