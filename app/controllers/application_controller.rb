@@ -18,9 +18,8 @@ class ApplicationController < ActionController::API
   def decode_token
     return unless auth_header
 
-    token = auth_header.split('')[1]
     begin
-      JWT.decode(token, JWT_SECRET, 'HS256')
+      JWT.decode(auth_header, JWT_SECRET, 'HS256')
     rescue JWT::DecodeError
       nil
     end
@@ -30,6 +29,7 @@ class ApplicationController < ActionController::API
     return false unless decode_token
 
     uid = decode_token[0]['user_id']
+
     @user = User.find_by(id: uid)
   end
 

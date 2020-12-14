@@ -4,7 +4,7 @@ class Api::V1::TransactionsController < ApplicationController
 
   # GET /transactions
   def index
-    @transactions = Transaction.all
+    @transactions = current_user.transactions
 
     render json: @transactions
   end
@@ -16,7 +16,7 @@ class Api::V1::TransactionsController < ApplicationController
 
   # POST /transactions
   def create
-    @transaction = Transaction.new(transaction_params)
+    @transaction = current_user.transactions.new(transaction_params)
 
     if @transaction.save
       render json: @transaction, status: :created, location: api_v1_transactions_path

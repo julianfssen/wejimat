@@ -14,12 +14,12 @@ function User() {
 		e.preventDefault();
 
 		const data = {
-			username,
-			email,
-			password
+			user: {
+			  username,
+			  email,
+			  password
+			}
 		}
-
-		console.log('request data', data);
 
 		fetch('http://localhost:3000/api/v1/users', {
 			method: 'POST',
@@ -30,13 +30,15 @@ function User() {
 			body: JSON.stringify(data)
 		})
 			.then(response => {
-				if (response.ok) {
-					response = response.json();
-					localStorage.setItem('token', response.token);
-					setSignupSuccess(true);
-				} else {
-					console.log('fail', response);
+				if (!response.ok) {
+					throw Error(response.statusText);
 				}
+				return response;
+			})
+			.then(response => response.json())
+			.then(data => {
+				localStorage.setItem('token', data.token);
+				setSignupSuccess(true);
 			});
 	}
 

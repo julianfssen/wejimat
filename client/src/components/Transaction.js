@@ -8,21 +8,28 @@ function Transaction() {
 	const callApi = (req) => {
 		fetch(req)
 			.then(response => response.json())
-			.then(txns => setTransactions(txns))
+			.then(txns => {
+				console.log(txns);
+				setTransactions(txns)
+			})
 	}
 	
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		const data = {
-			name: transactionName,
-			amount: transactionAmount
+			transaction: {
+			  name: transactionName,
+			  amount: transactionAmount
+			}
 		}
 
 		fetch('http://localhost:3000/api/v1/transactions', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': localStorage.getItem('token')
 			},
 			body: JSON.stringify(data)
 		});
