@@ -48,7 +48,7 @@ class Api::V1::TransactionsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def transaction_params
-    params.require(:transaction).permit(:name, :amount)
+    params.require(:transaction).permit(:name, :amount, :payment_channel)
   end
 
   def current_user

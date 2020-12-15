@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Transaction() {
 	const [transactionName, setTransactionName] = useState('');
 	const [transactionAmount, setTransactionAmount] = useState(0);
 	const [transactions, setTransactions] = useState([]);
+	const [paymentChannels, setPaymentChannels] = useState([]);
+	const [selectedPaymentChannel, setSelectedPaymentChannel] = useState('');
 
 	const callApi = (req) => {
 		fetch(req, {
@@ -19,14 +21,32 @@ function Transaction() {
 				setTransactions(txns)
 			})
 	}
-	
+
+	const fetchPaymentChannels = () => {
+		fetch('http://localhost:3000/api/v1/payment_channels', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': localStorage.getItem('token')
+			}
+		})
+			.then(response => response.json())
+			.then(response => {
+				setPaymentChannels([...response.channels])
+			})
+	}
+
+	useEffect(() => fetchPaymentChannels(), []);
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		const data = {
 			transaction: {
 			  name: transactionName,
-			  amount: transactionAmount
+			  amount: transactionAmount,
+				payment_channel: selectedPaymentChannel
 			}
 		}
 
@@ -61,6 +81,12 @@ function Transaction() {
 			  	onChange={e => setTransactionAmount(e.target.value)}
 			  >
 			  </input>
+				<select
+					name='paymentChannels'
+					onChange={e => setSelectedPaymentChannel(e.target.value)}
+				>
+					{paymentChannels.map(channel => <option value={channel} key={channel}>{channel}</option>)}
+				</select>
 			  <input
 					type='submit'
 					value='Add Transaction'

@@ -1,9 +1,10 @@
-class PaymentChannelsController < ApplicationController
+class Api::V1::PaymentChannelsController < ApplicationController
   before_action :set_payment_channel, only: [:show, :update, :destroy]
+  before_action :authorized
 
   # GET /payment_channels
   def index
-    @payment_channels = PaymentChannel.all
+    @payment_channels = { channels: ['Boost', 'Grab', 'Touch N Go', 'Cash'] }
 
     render json: @payment_channels
   end
