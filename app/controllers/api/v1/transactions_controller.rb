@@ -21,6 +21,7 @@ class Api::V1::TransactionsController < ApplicationController
     if @transaction.save
       render json: @transaction, status: :created, location: api_v1_transactions_path
     else
+      p @transaction.errors
       render json: @transaction.errors, status: :unprocessable_entity
     end
   end
@@ -48,7 +49,7 @@ class Api::V1::TransactionsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def transaction_params
-    params.require(:transaction).permit(:name, :amount, :payment_channel)
+    params.require(:transaction).permit(:name, :amount, payment_channel_attributes: :name)
   end
 
   def current_user

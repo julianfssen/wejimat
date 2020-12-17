@@ -46,7 +46,9 @@ function Transaction() {
 			transaction: {
 			  name: transactionName,
 			  amount: transactionAmount,
-				payment_channel: selectedPaymentChannel
+				payment_channel_attributes: {
+					name: selectedPaymentChannel
+				}
 			}
 		}
 
