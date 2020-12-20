@@ -5,5 +5,5 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-Transaction.create(name: 'Grab', amount: 5.90)
-Transaction.create(name: 'BBQ with Boost', amount: 100.40)
+Expense.create(name: 'Grab', amount: 5.90)
+Expense.create(name: 'BBQ with Boost', amount: 100.40)

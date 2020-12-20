@@ -43,7 +43,7 @@ function Transaction() {
 		e.preventDefault();
 
 		const data = {
-			transaction: {
+			expense: {
 			  name: transactionName,
 			  amount: transactionAmount,
 				payment_channel_attributes: {
@@ -52,7 +52,7 @@ function Transaction() {
 			}
 		}
 
-		fetch('http://localhost:3000/api/v1/transactions', {
+		fetch('http://localhost:3000/api/v1/expenses', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function Transaction() {
 				'Authorization': localStorage.getItem('token')
 			},
 			body: JSON.stringify(data)
-		});
+		})
 	}
 
 	return (
@@ -95,7 +95,7 @@ function Transaction() {
 			  />
 			</form>
 			<button
-				onClick={() => callApi('http://localhost:3000/api/v1/transactions')}
+				onClick={() => callApi('http://localhost:3000/api/v1/expenses')}
 			>
 			  My Transactions
 			</button>
