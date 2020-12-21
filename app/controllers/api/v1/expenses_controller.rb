@@ -16,7 +16,10 @@ class Api::V1::ExpensesController < ApplicationController
 
   # POST /expenses
   def create
-    @expense = current_user.expenses.new(expense_params)
+    @expense = current_user.expenses.new(expense_params.except(:payment_channel))
+    klass = expense_params[:payment_channel].camelize.constantize
+    payment_channel = klass.create(name: current_user.username)
+    @expense.payment_channel = payment_channel
 
     if @expense.save
       render json: @expense, status: :created, location: api_v1_expenses_path
@@ -49,7 +52,7 @@ class Api::V1::ExpensesController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def expense_params
-    params.require(:expense).permit(:name, :amount, payment_channel_attributes: [:name])
+    params.require(:expense).permit(:name, :amount, :payment_channel)
   end
 
   def current_user

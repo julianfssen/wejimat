@@ -6,9 +6,25 @@ function Transaction() {
 	const [transactions, setTransactions] = useState([]);
 	const [paymentChannels, setPaymentChannels] = useState([]);
 	const [selectedPaymentChannel, setSelectedPaymentChannel] = useState('');
+	const [transactionsByChannel, setPaymentChannelToView] = useState('');
 
 	const callApi = (req) => {
 		fetch(req, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': localStorage.getItem('token')
+			}
+		})
+			.then(response => response.json())
+			.then(txns => {
+				setTransactions(txns)
+			})
+	}
+
+	const viewPaymentsByChannel = (channel) => {
+		fetch(`http://localhost:3000/api/v1/expenses?channel=${channel}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -46,9 +62,7 @@ function Transaction() {
 			expense: {
 			  name: transactionName,
 			  amount: transactionAmount,
-				payment_channel_attributes: {
-					name: selectedPaymentChannel
-				}
+				payment_channel: selectedPaymentChannel
 			}
 		}
 
@@ -61,6 +75,11 @@ function Transaction() {
 			},
 			body: JSON.stringify(data)
 		})
+	}
+
+	const handleChannelChange = (channel) => {
+		setPaymentChannelToView(channel);
+		viewPaymentsByChannel(transactionsByChannel);
 	}
 
 	return (
@@ -97,8 +116,17 @@ function Transaction() {
 			<button
 				onClick={() => callApi('http://localhost:3000/api/v1/expenses')}
 			>
-			  My Transactions
+			  All Transactions
 			</button>
+			<h3>
+				View expense by channel
+			</h3>
+			<select
+				name='transactionsByPaymentChannel'
+				onChange={e => handleChannelChange(e.target.value)}
+			>
+				{paymentChannels.map(channel => <option value={channel} key={channel}>{channel}</option>)}
+			</select>
 			<div>
 				<ul>
 					{transactions.map(txn => <li key={txn.id}>{txn.name}: {txn.amount}</li>)}
