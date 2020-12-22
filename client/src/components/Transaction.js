@@ -24,7 +24,7 @@ function Transaction() {
 	}
 
 	const viewPaymentsByChannel = (channel) => {
-		fetch(`http://localhost:3000/api/v1/expenses?channel=${channel}`, {
+		fetch(`http://localhost:3000/api/v1/expenses?payment_channel=${channel}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ function Transaction() {
 		})
 			.then(response => response.json())
 			.then(txns => {
-				setTransactions(txns)
+				setTransactions(txns);
 			})
 	}
 
@@ -114,7 +114,7 @@ function Transaction() {
 			  />
 			</form>
 			<button
-				onClick={() => callApi('http://localhost:3000/api/v1/expenses')}
+				onClick={() => callApi('http://localhost:3000/api/v1/expenses?payment_channel=grab')}
 			>
 			  All Transactions
 			</button>

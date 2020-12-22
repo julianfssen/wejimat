@@ -4,7 +4,8 @@ class Api::V1::ExpensesController < ApplicationController
 
   # GET /expenses
   def index
-    @expenses = current_user.expenses
+    query = params[:payment_channel]
+    @expenses = query.present? ? show_expenses_by_payment_channel(query) : current_user.expenses
 
     render json: @expenses
   end
@@ -12,6 +13,12 @@ class Api::V1::ExpensesController < ApplicationController
   # GET /expenses/1
   def show
     render json: @expense
+  end
+
+  # GET /expenses?payment_channel=#{query}
+  def show_expenses_by_payment_channel(payment_channel)
+    expenses = current_user.expenses.by_payment_channel(payment_channel)
+    expenses
   end
 
   # POST /expenses
