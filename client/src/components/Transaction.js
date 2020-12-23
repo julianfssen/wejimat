@@ -24,6 +24,7 @@ function Transaction() {
 	}
 
 	const viewPaymentsByChannel = (channel) => {
+		setPaymentChannelToView(channel);
 		fetch(`http://localhost:3000/api/v1/expenses?payment_channel=${channel}`, {
 			method: 'GET',
 			headers: {
@@ -78,8 +79,7 @@ function Transaction() {
 	}
 
 	const handleChannelChange = (channel) => {
-		setPaymentChannelToView(channel);
-		viewPaymentsByChannel(transactionsByChannel);
+		viewPaymentsByChannel(channel);
 	}
 
 	return (
