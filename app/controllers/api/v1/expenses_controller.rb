@@ -4,8 +4,8 @@ class Api::V1::ExpensesController < ApplicationController
 
   # GET /expenses
   def index
-    query = params[:payment_channel]
-    @expenses = query.present? ? show_expenses_by_payment_channel(query) : current_user.expenses
+    query_params = request.query_string
+    @expenses = query_params.present? ? show_expenses_by_query(params) : current_user.expenses
 
     render json: @expenses
   end
@@ -16,8 +16,8 @@ class Api::V1::ExpensesController < ApplicationController
   end
 
   # GET /expenses?payment_channel=#{query}
-  def show_expenses_by_payment_channel(payment_channel)
-    expenses = current_user.expenses.by_payment_channel(payment_channel)
+  def show_expenses_by_query(params)
+    expenses = current_user.expenses.filter_by_query(params)
     expenses
   end
 
@@ -31,7 +31,6 @@ class Api::V1::ExpensesController < ApplicationController
     if @expense.save
       render json: @expense, status: :created, location: api_v1_expenses_path
     else
-      pp @expense.errors
       render json: @expense.errors, status: :unprocessable_entity
     end
   end

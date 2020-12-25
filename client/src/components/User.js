@@ -3,12 +3,27 @@ import {
 	Redirect
 } from 'react-router-dom';
 
+const USER_TOKEN = localStorage.getItem('token');
 
-function User() {
+export function checkLoggedIn() {
+  if (USER_TOKEN) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export function handleLogout() {
+  localStorage.removeItem('token');
+
+  return true;
+}
+
+function UserAuth({ login }) {
 	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [signupSuccess, setSignupSuccess] = useState(false);
+	const [authSuccess, setAuthSuccess] = useState(false);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -21,7 +36,9 @@ function User() {
 			}
 		}
 
-		fetch('http://localhost:3000/api/v1/users', {
+    const url = login ? 'http://localhost:3000/api/v1/login' : 'http://localhost:3000/api/v1/users'
+
+		fetch(url, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -38,37 +55,62 @@ function User() {
 			.then(response => response.json())
 			.then(data => {
 				localStorage.setItem('token', data.token);
-				setSignupSuccess(true);
+				setAuthSuccess(true);
 			});
 	}
 
-	if (signupSuccess) {
+  function LoginForm() {
+    return (
+  	  <div>
+  	  	<form onSubmit={e => handleSubmit(e)}>
+  	  		<input
+  	  		  placeholder='Username' 
+  	  		  value={username}
+  	  			onChange={e => setUsername(e.target.value)}
+  	  		/>
+  	  		<input
+  	  			type='password'
+  	  		  placeholder='Password'
+  	  		  value={password}
+  	  			onChange={e => setPassword(e.target.value)}
+  	  		/>
+  	  		<input type='submit' value='Login'/>
+  	  	</form>
+  	  </div>
+    )
+  }
+  
+  function SignupForm() {
+    return (
+  	  <div>
+  	  	<form onSubmit={e => handleSubmit(e)}>
+  	  		<input
+  	  		  placeholder='Username' 
+  	  		  value={username}
+  	  			onChange={e => setUsername(e.target.value)}
+  	  		/>
+  	  		<input
+  	  			placeholder='Email' 
+  	  		  value={email}
+  	  			onChange={e => setEmail(e.target.value)}
+  	  		/>
+  	  		<input
+  	  			type='password'
+  	  		  placeholder='Password'
+  	  		  value={password}
+  	  			onChange={e => setPassword(e.target.value)}
+  	  		/>
+  	  		<input type='submit' value='Signup'/>
+  	  	</form>
+  	  </div>
+    )
+  }
+
+	if (authSuccess) {
 		return <Redirect to='/' />
 	} else {
-	  return (
-	  	<div>
-	  		<form onSubmit={e => handleSubmit(e)}>
-	  			<input
-	  			  placeholder='Username' 
-	  			  value={username}
-	  				onChange={e => setUsername(e.target.value)}
-	  			/>
-	  			<input
-	  				placeholder='Email' 
-	  			  value={email}
-	  				onChange={e => setEmail(e.target.value)}
-	  			/>
-	  			<input
-	  				type='password'
-	  			  placeholder='Password'
-	  			  value={password}
-	  				onChange={e => setPassword(e.target.value)}
-	  			/>
-	  			<input type='submit' value='Signup'/>
-	  		</form>
-	  	</div>
-	  )
+	  return login ? <LoginForm /> : <SignupForm />
 	}
 }
 
-export default User;
+export default UserAuth;

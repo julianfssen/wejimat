@@ -5,11 +5,26 @@ function Transaction() {
 	const [transactionAmount, setTransactionAmount] = useState(0);
 	const [transactions, setTransactions] = useState([]);
 	const [paymentChannels, setPaymentChannels] = useState([]);
-	const [selectedPaymentChannel, setSelectedPaymentChannel] = useState('');
+	const [selectedPaymentChannel, setSelectedPaymentChannel] = useState('Boost');
 	const [transactionsByChannel, setPaymentChannelToView] = useState('');
 
-	const callApi = (req) => {
-		fetch(req, {
+	const MONTHS = [
+	  'January',
+	  'February',
+	  'March',
+	  'April',
+	  'May',
+	  'June',
+	  'July',
+	  'August',
+	  'September',
+	  'October',
+	  'November',
+	  'December'
+	];
+
+	const viewAllTransactions = () => {
+		fetch('http://localhost:3000/api/v1/expenses', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -26,6 +41,37 @@ function Transaction() {
 	const viewPaymentsByChannel = (channel) => {
 		setPaymentChannelToView(channel);
 		fetch(`http://localhost:3000/api/v1/expenses?payment_channel=${channel}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': localStorage.getItem('token')
+			}
+		})
+			.then(response => response.json())
+			.then(txns => {
+				setTransactions(txns);
+			})
+	}
+
+	const viewPaymentsByMonth = (month) => {
+		fetch(`http://localhost:3000/api/v1/expenses?month=${month}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+				'Authorization': localStorage.getItem('token')
+			}
+		})
+			.then(response => response.json())
+			.then(txns => {
+				setTransactions(txns);
+			})
+	}
+
+	const viewPaymentsByDate = (date) => {
+		let formattedDate = date.replaceAll('-', '');
+		fetch(`http://localhost:3000/api/v1/expenses?date=${formattedDate}`, {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json',
@@ -68,7 +114,7 @@ function Transaction() {
 		}
 
 		fetch('http://localhost:3000/api/v1/expenses', {
-			method: 'POST',
+		    method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 				'Accept': 'application/json',
@@ -79,7 +125,15 @@ function Transaction() {
 	}
 
 	const handleChannelChange = (channel) => {
-		viewPaymentsByChannel(channel);
+	  viewPaymentsByChannel(channel);
+	}
+
+	const handleMonthChange = (channel) => {
+	  viewPaymentsByMonth(channel);
+	}
+
+	const handleDateChange = (date) => {
+	  viewPaymentsByDate(date);
 	}
 
 	return (
@@ -106,7 +160,7 @@ function Transaction() {
 					name='paymentChannels'
 					onChange={e => setSelectedPaymentChannel(e.target.value)}
 				>
-					{paymentChannels.map(channel => <option value={channel} key={channel}>{channel}</option>)}
+					{paymentChannels.map((channel, index) => <option value={channel} key={channel}>{channel}</option>)}
 				</select>
 			  <input
 					type='submit'
@@ -114,12 +168,12 @@ function Transaction() {
 			  />
 			</form>
 			<button
-				onClick={() => callApi('http://localhost:3000/api/v1/expenses?payment_channel=grab')}
+				onClick={() => viewAllTransactions()}
 			>
 			  All Transactions
 			</button>
 			<h3>
-				View expense by channel
+				View expenses by channel
 			</h3>
 			<select
 				name='transactionsByPaymentChannel'
@@ -127,6 +181,20 @@ function Transaction() {
 			>
 				{paymentChannels.map(channel => <option value={channel} key={channel}>{channel}</option>)}
 			</select>
+			<h3>
+				View expenses by month
+			</h3>
+			<select
+				name='transactionsByMonth'
+				onChange={e => handleMonthChange(e.target.value)}
+			>
+				{MONTHS.map(month=> <option value={month} key={month}>{month}</option>)}
+			</select>
+			<input 
+			  label='date'
+			  type='date'
+			  onChange={e => handleDateChange(e.target.value)}>
+			</input>
 			<div>
 				<ul>
 					{transactions.map(txn => <li key={txn.id}>{txn.name}: {txn.amount}</li>)}

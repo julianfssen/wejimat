@@ -29,12 +29,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def login
-    @user = User.find_by(username: params[:username])
+    @user = User.find_by(username: params[:user][:username])
 
-    if @user&.authenticate(params[:password])
+    if @user&.authenticate(params[:user][:password])
       payload = { user_id: @user.id }
       token = encode_token(payload)
-      render json: { user: @user, token: token }
+      render json: { user: @user, token: token }, status: :ok, location: api_v1_user_path(@user)
     else
       render json: { error: 'Invalid username or password' }
     end
