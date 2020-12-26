@@ -5,13 +5,19 @@ import {
 	BrowserRouter as Router,
 	Switch,
 	Route,
-	Link
+	Link,
 } from 'react-router-dom';
 
 function App() {
   const [loggedIn, setLogin] = useState(false);
 
-  useEffect(() => setLogin(checkLoggedIn()), []);
+  const handleAuthChange = () => {
+    if (loggedIn) {
+      window.location.reload();
+    }
+  }
+
+  useEffect(() => setLogin(checkLoggedIn()), [loggedIn]);
 
   return (
 		<Router>
@@ -52,7 +58,7 @@ function App() {
 		        <Transaction />
 			  	</Route>
 			  	<Route path='/login'>
-			  		<UserAuth login={true} />
+            <UserAuth login={true} onAuthChange={() => handleAuthChange()} />
 			  	</Route>
 			  	<Route path='/signup'>
 			  		<UserAuth login={false} />

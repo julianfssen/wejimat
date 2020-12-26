@@ -19,11 +19,15 @@ export function handleLogout() {
   return true;
 }
 
-function UserAuth({ login }) {
+function UserAuth({ login, onAuthChange }) {
 	const [username, setUsername] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [authSuccess, setAuthSuccess] = useState(false);
+
+  const handleAuthSuccess = (success) => {
+    setAuthSuccess(success);
+  }
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -55,7 +59,7 @@ function UserAuth({ login }) {
 			.then(response => response.json())
 			.then(data => {
 				localStorage.setItem('token', data.token);
-				setAuthSuccess(true);
+        handleAuthSuccess(true);
 			});
 	}
 
@@ -107,7 +111,11 @@ function UserAuth({ login }) {
   }
 
 	if (authSuccess) {
-		return <Redirect to='/' />
+		return <Redirect to={{
+        pathname: '/',
+        state: { loggedIn: authSuccess }
+      }}
+    />
 	} else {
 	  return login ? <LoginForm /> : <SignupForm />
 	}
