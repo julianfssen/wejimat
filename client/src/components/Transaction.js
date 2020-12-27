@@ -137,8 +137,8 @@ function Transaction() {
 	}
 
 	return (
-		<div>
-			<h1>What did you spend on?</h1>
+		<div className='mx-auto'>
+			<h1 className='text-purple-700 text-opacity-100 font-bold'>What did you spend on?</h1>
 			<form onSubmit={e => handleSubmit(e)}>
 			  <input
 			  	type='text'
