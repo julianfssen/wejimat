@@ -138,7 +138,7 @@ function Transaction() {
 
 	return (
 		<div className='mx-auto w-1/2'>
-			<h1 className='text-purple-700 text-opacity-100 font-bold text-center text-xl'>What did you spend on?</h1>
+			<h1 className='my-5 text-purple-700 font-bold text-center text-2xl'>What did you spend on?</h1>
 			<form onSubmit={e => handleSubmit(e)}>
 			  <input
 			  	type='text'
@@ -146,6 +146,7 @@ function Transaction() {
 			    placeholder='I spent on...'
 			  	value={transactionName}
 			  	onChange={e => setTransactionName(e.target.value)}
+				className='mx-4 border rounded-md focus:ring-2 focus:ring-purple-600 shadow-md placeholder-gray-600'
 			  >
 			  </input>
 			  <input
@@ -154,21 +155,24 @@ function Transaction() {
 			    placeholder='For RM...'
 					value={transactionAmount > 0 ? transactionAmount : ''}
 			  	onChange={e => setTransactionAmount(e.target.value)}
+				className='mx-4 w-24 border rounded-md focus:ring-2 focus:ring-purple-600 shadow-md placeholder-gray-600'
 			  >
 			  </input>
 				<select
-					name='paymentChannels'
-					onChange={e => setSelectedPaymentChannel(e.target.value)}
+				  name='paymentChannels'
+				  onChange={e => setSelectedPaymentChannel(e.target.value)}
+				  className='inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
 				>
-					{paymentChannels.map((channel, index) => <option value={channel} key={channel}>{channel}</option>)}
+				  {paymentChannels.map((channel, index) => <option value={channel} key={channel}>{channel}</option>)}
 				</select>
 			  <input
-					type='submit'
-					value='Add Transaction'
+				  className='mx-4 border rounded-md bg-purple-600 text-white font-medium p-1.5 px-5 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 cursor-pointer'
+				  type='submit'
+				  value='Add Expense'
 			  />
 			</form>
 			<button
-				onClick={() => viewAllTransactions()}
+			  onClick={() => viewAllTransactions()}
 			>
 			  All Transactions
 			</button>
