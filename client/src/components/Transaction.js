@@ -207,7 +207,7 @@ function Transaction() {
 		      	{MONTHS.map(month=> <option value={month} key={month}>{month}</option>)}
 		      </select>
 			</div>
-			<div className='view-expenses-by-date mx-auto'>
+			<div className='view-expenses-by-date flex mx-auto'>
 		      <h3 className='mx-5 my-5 text-purple-700 font-semibold text-center text-xl'>
 		      	View expenses by date
 		      </h3>
@@ -221,10 +221,29 @@ function Transaction() {
 		      </input>
 			</div>
 		  </div>
-		  <div className='expenses-list'>
-		  	<ul>
-		  		{transactions.map(txn => <li key={txn.id}>{txn.name}: {txn.amount}</li>)}
-		  	</ul>
+		  <div className='my-5 expenses-list grid grid-cols-3'>
+		  	{transactions.map(txn =>
+			  <React.Fragment>
+			    <div 
+				  className='text-center py-2 bg-purple-200 bg-opacity-70 rounded-md'
+		          key={`expense-name-${txn.id}`}
+			    >
+			      {txn.name}
+			    </div>
+			    <div
+				  className='text-center py-2 bg-purple-300 bg-opacity-50 rounded-md'
+			      key={`expense-amount-${txn.id}`}
+			    >
+			      {txn.amount}
+			    </div>
+			    <div
+				  className='text-center py-2 bg-purple-300 bg-opacity-60 rounded-md'
+			      key={`expense-date-${txn.id}`}
+			    >
+			      {new Date(txn.created_at).toLocaleDateString()}
+			    </div>
+			  </React.Fragment>
+			)}
 		  </div>
 		</div>
 	)
