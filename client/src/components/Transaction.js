@@ -139,10 +139,15 @@ function Transaction() {
 	return (
 		<div className='mx-auto w-1/2'>
 		  <div className='add-expense-form mx-auto w-3/4'>
-		    <h1 className='my-5 text-purple-700 font-bold text-center text-2xl'>
-			  What did you spend on today?
-			</h1>
-		    <form onSubmit={e => handleSubmit(e)}>
+				<div>
+		      <h1 className='my-5 text-purple-700 font-bold text-center text-2xl'>
+			      What did you spend on today?
+			    </h1>
+				</div>
+		    <form
+					onSubmit={e => handleSubmit(e)}
+				  className='grid grid-cols-1 gap-4'
+				>
 		      <input
 		      	type='text'
 		      	name='transactionName'
