@@ -148,31 +148,51 @@ function Transaction() {
 					onSubmit={e => handleSubmit(e)}
 				  className='grid grid-cols-1 gap-4'
 				>
+					<div
+					  className='text-purple-700 font-semibold text-center text-xl'
+					>
+						I spent on...
+					</div>
 		      <input
 		      	type='text'
 		      	name='transactionName'
-		        placeholder='I spent on...'
+		        placeholder='Food, games, online shopping...'
 		      	value={transactionName}
 		      	onChange={e => setTransactionName(e.target.value)}
-		    	className='mx-2 px-2 border rounded-md focus:ring-2 focus:ring-purple-600 shadow-md placeholder-gray-600'
+		    	className='mx-2 px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-600 shadow-md'
 		      >
 		      </input>
+					<div
+					  className='text-purple-700 font-semibold text-center text-xl'
+					>
+						For this amount...
+					</div>
 		      <input
 		      	type='text'
 		      	name='transactionAmount'
 		        placeholder='For RM...'
 		    		value={transactionAmount > 0 ? transactionAmount : ''}
 		      	onChange={e => setTransactionAmount(e.target.value)}
-		    	className='mx-2 px-2 w-24 border rounded-md focus:ring-2 focus:ring-purple-600 shadow-md placeholder-gray-600'
+		    	className='mx-2 px-4 py-2 w-24 border rounded-md focus:ring-2 focus:ring-purple-600 shadow-md'
 		      >
 		      </input>
-		    	<select
+					<div
+					  className='text-purple-700 font-semibold text-center text-xl'
+					>
+						By using...
+					</div>
+		    	<input
 		    	  name='paymentChannels'
 		    	  onChange={e => setSelectedPaymentChannel(e.target.value)}
 		    	  className='inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm mx-2 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
-		    	>
-		    	  {paymentChannels.map((channel, index) => <option value={channel} key={channel}>{channel}</option>)}
-		    	</select>
+						list='paymentChannelsList'
+						placeholder='e.g. Boost, Grab, Cash'
+		    	/>
+					<datalist
+						id='paymentChannelsList'
+					>
+		    	  {paymentChannels.map(channel => <option value={channel} key={channel}>{channel}</option>)}
+					</datalist>
 		      <input
 		    	  className='mx-2 border rounded-md bg-purple-600 text-white font-medium p-1.5 px-5 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 cursor-pointer'
 		    	  type='submit'

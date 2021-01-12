@@ -33,3 +33,6 @@
 
 # Ignore swap files
 *.swp
+
+# Ignore auto-generated eslintcache
+*.eslintcache
