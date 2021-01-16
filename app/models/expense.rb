@@ -30,7 +30,7 @@ class Expense < ApplicationRecord
     end
 
     def filter_by_date(date)
-      formatted_date = Time.zone.parse(date);
+      formatted_date = Time.zone.parse(date)
       where(created_at: formatted_date.beginning_of_day..formatted_date.end_of_day)
     end
   end
