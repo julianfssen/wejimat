@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Expense < ApplicationRecord
   belongs_to :user
   has_one :payment_channel, dependent: :destroy
@@ -11,6 +13,36 @@ class Expense < ApplicationRecord
   scope :filter_by_year, ->(year) {
     where("date_part('year', created_at) = ?", year)
   }
+
+  def initialize(args)
+    formatted_params = {}
+
+    args.each_pair do |key, value|
+      formatted_value = format_name(value) if key.eql?('name')
+      formatted_value = format_amount(value) if key.eql?('amount')
+      formatted_value = generate_payment_channel_class(value) if key.eql?('payment_channel')
+      formatted_params[key] = formatted_value
+    end
+
+    args = ActionController::Parameters.new(formatted_params)
+
+    super(args)
+  end
+
+  def format_name(name)
+    name = name.strip
+    name
+  end
+
+  def format_amount(amount)
+    amount
+  end
+
+  def generate_payment_channel_class(payment_channel)
+    klass = payment_channel.camelize.constantize
+    payment_channel = klass.create(name: '')
+    payment_channel
+  end
 
   class << self
     def filter_by_query(params)

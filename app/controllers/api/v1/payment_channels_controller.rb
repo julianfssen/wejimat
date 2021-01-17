@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::PaymentChannelsController < ApplicationController
   before_action :set_payment_channel, only: [:show, :update, :destroy]
   before_action :authorized

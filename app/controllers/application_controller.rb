@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'jwt'
 
-JWT_SECRET = 'WwW3j!m$4Tt!'.freeze
+JWT_SECRET = 'WwW3j!m$4Tt!'
 
 class ApplicationController < ActionController::API
   before_action :authorized

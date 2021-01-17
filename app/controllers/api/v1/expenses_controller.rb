@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::ExpensesController < ApplicationController
   before_action :authorized
   before_action :set_expense, only: [:show, :update, :destroy]
@@ -23,10 +25,7 @@ class Api::V1::ExpensesController < ApplicationController
 
   # POST /expenses
   def create
-    @expense = current_user.expenses.new(expense_params.except(:payment_channel))
-    klass = expense_params[:payment_channel].camelize.constantize
-    payment_channel = klass.create(name: current_user.username)
-    @expense.payment_channel = payment_channel
+    @expense = current_user.expenses.new(expense_params)
 
     if @expense.save
       render json: @expense, status: :created, location: api_v1_expenses_path
