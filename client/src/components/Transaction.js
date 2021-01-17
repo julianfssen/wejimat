@@ -136,6 +136,43 @@ function Transaction() {
 	  viewPaymentsByDate(date);
 	}
 
+	const formatAmount = (amount) => {
+		let [dollars, cents] = amount.split('.');
+		let formattedDollars = '';
+		let formattedCents;
+
+		if (dollars.length > 3) {
+			let separatorCount = Math.floor(dollars.length / 3);
+
+			for (let counter = 0; counter < separatorCount; counter++) {
+				const startIndex = dollars.length - (3 * (counter + 1));
+				const endIndex = startIndex + 3;
+				const tmp = counter === 0 ? dollars.substring(startIndex) : dollars.substring(startIndex, endIndex);
+
+				formattedDollars = ',' + tmp + formattedDollars;
+			}
+
+			formattedDollars = dollars.substring(0, dollars.length % 3) + formattedDollars
+		} else {
+			formattedDollars = dollars;
+		}
+
+		if (cents.length < 2) {
+			formattedCents = cents.padEnd(2, '0');
+		} else {
+			formattedCents = cents;
+		}
+
+		const formattedAmount = 'RM' + formattedDollars + '.' + formattedCents;
+
+		return formattedAmount
+	}
+
+	const formatDate = (date) => {
+		const options = { weekday: 'long', month: 'long', day: 'numeric' };
+		return new Date(date).toLocaleDateString('en-GB', options)
+	}
+
 	return (
 		<div className='mx-auto w-1/2'>
 		  <div className='add-expense-form mx-auto w-3/4'>
@@ -257,45 +294,32 @@ function Transaction() {
 		        </input>
 			  </div>
 		  </div>
-		  <div className='my-5 expenses-list grid grid-cols-3'>
-				<div
-					className='text-center py-2 bg-purple-200 bg-opacity-70 rounded-md font-bold'
+			<div
+				className='expenses-table-container mt-10'
+			>
+				<table
+					className='expenses-table border-collapse border w-full'
 				>
-					Expense
-				</div>
-				<div
-					className='text-center py-2 bg-purple-200 bg-opacity-70 rounded-md font-bold'
-				>
-					Amount
-				</div>
-				<div
-					className='text-center py-2 bg-purple-200 bg-opacity-70 rounded-md font-bold'
-				>
-					Date
-				</div>
-		  	{transactions.map(txn =>
-			  <React.Fragment>
-			    <div 
-				  className='text-center py-2 bg-purple-200 bg-opacity-70 rounded-md'
-		          key={`expense-name-${txn.id}`}
-			    >
-			      {txn.name}
-			    </div>
-			    <div
-				  className='text-center py-2 bg-purple-300 bg-opacity-50 rounded-md'
-			      key={`expense-amount-${txn.id}`}
-			    >
-			      {txn.amount}
-			    </div>
-			    <div
-				  className='text-center py-2 bg-purple-300 bg-opacity-60 rounded-md'
-			      key={`expense-date-${txn.id}`}
-			    >
-			      {new Date(txn.created_at).toLocaleDateString()}
-			    </div>
-			  </React.Fragment>
-			)}
-		  </div>
+					<tr>
+						<th
+							className='w-1/2'
+						>
+						  Expense
+						</th>
+						<th>Amount</th>
+						<th>Date</th>
+					</tr>
+					{transactions.map(txn =>
+					  <tr
+							key={`expense-${txn.id}`}
+						>
+							<td>{txn.name}</td>
+							<td>{formatAmount(txn.amount)}</td>
+							<td>{formatDate(txn.created_at)}</td>
+					  </tr>
+					)}
+				</table>
+			</div>
 		</div>
 	)
 }

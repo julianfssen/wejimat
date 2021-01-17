@@ -21,10 +21,10 @@ class Expense < ApplicationRecord
       formatted_value = format_name(value) if key.eql?('name')
       formatted_value = format_amount(value) if key.eql?('amount')
       formatted_value = generate_payment_channel_class(value) if key.eql?('payment_channel')
-      formatted_params[key] = formatted_value
+      formatted_params[key.to_sym] = formatted_value
     end
 
-    args = ActionController::Parameters.new(formatted_params)
+    args = ActionController::Parameters.new(formatted_params).permit!
 
     super(args)
   end
@@ -35,6 +35,7 @@ class Expense < ApplicationRecord
   end
 
   def format_amount(amount)
+    amount = format('%.2f', amount)
     amount
   end
 
