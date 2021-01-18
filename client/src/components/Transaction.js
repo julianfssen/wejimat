@@ -250,72 +250,65 @@ function Transaction() {
 			  <h1 className='mx-5 my-5 text-purple-700 font-bold text-center text-2xl'>
 			    My Expenses
 			  </h1>
-		      <button
-		        className='view-all-expenses-btn mx-auto border rounded-md bg-purple-600 text-white font-medium p-1.5 px-5 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 cursor-pointer'
-		        onClick={() => viewAllTransactions()}
-		      >
-		        All Expenses
-		      </button>
-			  <div className='view-expenses-by-channel flex mx-auto'>
-		      <h3 className='mx-5 my-5 text-purple-700 font-semibold text-center text-xl'>
-		      	View expenses by payment providers
-		      </h3>
-		      <select
-		      	name='transactionsByPaymentChannel'
-		      	onChange={e => handleChannelChange(e.target.value)}
-		      	className='view-expenses-by-channel-btn inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm mx-2 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
-		      >
-		      	{paymentChannels.map(channel => <option value={channel} key={channel}>{channel}</option>)}
-		      </select>
-			  </div>
-			  <div className='view-expenses-by-month flex mx-auto'>
-		        <h3 className='mx-5 my-5 text-purple-700 font-semibold text-center text-xl'>
-		        	View expenses by month
-		        </h3>
+				<div className='flex'>
+			    <div className='view-expenses-by-channel mx-auto'>
+		        <button
+		          className='view-all-expenses-btn mx-auto border rounded-md bg-purple-600 text-white font-medium p-1.5 px-5 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 cursor-pointer'
+		          onClick={() => viewAllTransactions()}
+		        >
+		          All Expenses
+		        </button>
 		        <select
-		        	name='transactionsByMonth'
-		        	onChange={e => handleMonthChange(e.target.value)}
-		      	className='view-expenses-by-month-btn inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm mx-2 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
+		        	name='transactionsByPaymentChannel'
+		        	onChange={e => handleChannelChange(e.target.value)}
+		        	className='view-expenses-by-channel-btn inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm mx-2 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
+		        >
+		        	{paymentChannels.map(channel => <option value={channel} key={channel}>{channel}</option>)}
+		        </select>
+			    </div>
+			    <div className='view-expenses-by-month mx-auto'>
+		        <select
+		          name='transactionsByMonth'
+		          onChange={e => handleMonthChange(e.target.value)}
+		          className='view-expenses-by-month-btn inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm mx-2 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
 		        >
 		        	{MONTHS.map(month=> <option value={month} key={month}>{month}</option>)}
 		        </select>
-			  </div>
-			  <div className='view-expenses-by-date flex mx-auto'>
-		        <h3 className='mx-5 my-5 text-purple-700 font-semibold text-center text-xl'>
-		        	View expenses by date
-		        </h3>
+			    </div>
+			    <div className='view-expenses-by-date mx-auto'>
 		        <input 
 		          label='date'
 		          type='date'
 		          onChange={e => handleDateChange(e.target.value)}
-			  	defaultValue={new Date().toISOString().slice(0, 10)}
-		      	className='view-expenses-by-date-btn inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm mx-2 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
-			    >
-		        </input>
-			  </div>
+			    	  defaultValue={new Date().toISOString().slice(0, 10)}
+		        	className='view-expenses-by-date-btn inline-flex justify-center w-1/8 rounded-md border border-gray-300 shadow-sm mx-2 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500 cursor-pointer'
+			      />
+			    </div>
+				</div>
 		  </div>
 			<div
 				className='expenses-table-container mt-10'
 			>
 				<table
-					className='expenses-table border-collapse border w-full'
+					className='expenses-table border-collapse border-2 w-full'
 				>
 					<tr>
 						<th
-							className='w-1/2'
+							className='w-1/2 py-4 border-gray-300 border-2 bg-purple-100'
 						>
 						  Expense
 						</th>
-						<th>Amount</th>
-						<th>Date</th>
+						<th className='border-2 border-gray-300 bg-purple-100'>Amount</th>
+						<th className='border-2 border-gray-300 bg-purple-100'>Date</th>
 					</tr>
 					{transactions.map(txn =>
 					  <tr
 							key={`expense-${txn.id}`}
+							className='odd:bg-purple-50'
 						>
-							<td>{txn.name}</td>
-							<td>{formatAmount(txn.amount)}</td>
-							<td>{formatDate(txn.created_at)}</td>
+							<td className='px-4 py-4 border-b-2'>{txn.name}</td>
+							<td className='pr-3 text-right border-b-2'>{formatAmount(txn.amount)}</td>
+							<td className='text-center border-b-2'>{formatDate(txn.created_at)}</td>
 					  </tr>
 					)}
 				</table>
